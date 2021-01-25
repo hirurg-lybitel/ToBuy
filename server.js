@@ -14,12 +14,12 @@ app.get('/goods', (req, res) => {
 
     mongoClient.connect(function(err, client){
       
-        const db = client.db("database");
+        const db = client.db("database");    
         const collection = db.collection(req.query.name);
 
         if(err) return console.log(err);
       
-        collection.find().toArray(function(err, results){
+        collection.find().sort({"rate":1}).toArray(function(err, results){
                      
             console.log(results);
 
