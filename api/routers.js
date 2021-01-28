@@ -6,7 +6,6 @@ var router = express.Router();
 
 const MongoClient = require("mongodb").MongoClient;
 const ObjectId = require("mongodb").ObjectId;
-const url = "mongodb://localhost:27017/";
 
 router.use(express.json());
 
@@ -18,7 +17,7 @@ router.get('/', function(req, res) {
 router.get('/goods', function(req, res) {
   res.status(200).type('text/plain')
 
-  const mongoClient = new MongoClient(url, { useUnifiedTopology: true });
+  const mongoClient = new MongoClient(process.env.MONGO_URL, { useUnifiedTopology: true });
   mongoClient.connect(function(err, client){
     
       const db = client.db(process.env.MONGO_DATABASENAME);    
@@ -47,7 +46,7 @@ router.get('/groups', function(req, res) {
 router.patch('/goods', function(req, res){
   // нужна проверка прав пользователя
 
-  const mongoClient = new MongoClient(url, { useUnifiedTopology: true });
+  const mongoClient = new MongoClient(process.env.MONGO_URL, { useUnifiedTopology: true });
   mongoClient.connect(function(err, client){
 
     const db = client.db(process.env.MONGO_DATABASENAME);    
