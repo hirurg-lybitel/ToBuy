@@ -1,8 +1,12 @@
 // Использование пакета dotenv для чтения переменных из файла .env
 require('dotenv/config');
+const cors = require('cors');
 
 var express = require('express');
 var router = express.Router();
+const app = express();
+
+router.use(cors())
 
 const MongoClient = require("mongodb").MongoClient;
 const ObjectId = require("mongodb").ObjectId;
@@ -19,8 +23,8 @@ router.get('/goods', function(req, res) {
 
   const mongoClient = new MongoClient(process.env.MONGO_URL, { useUnifiedTopology: true });
   mongoClient.connect(function(err, client){
-    
-      const db = client.db(process.env.MONGO_DATABASENAME);    
+
+      const db = client.db(process.env.MONGO_DATABASENAME);
       const collection = db.collection(req.query.name);
 
       if(err) return console.log(err);
