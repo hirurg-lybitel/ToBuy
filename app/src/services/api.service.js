@@ -11,35 +11,16 @@ export default class ApiService {
     }
 
     getAllProducts = async () => {
-        // ToDo check it
-        return (await this.getResource('/goods?name=milk'))
+        // ToDo check it        
+        return (await this.getResource('/goods?name=kefir'))
     }
 
+    getAllProductsByGroup = async (GroupName) => {         
+        return (await this.getResource(`/goods?name=${GroupName}`))
+    }    
 
-    _transformPlanet = planet => ({
-        id: this._extractId(planet),
-        name: planet.name,
-        population: planet.population,
-        rotationPeriod: planet.rotation_period,
-        diameter: planet.population
-    });
-    _transformStarship = starship => ({
-        id: this._extractId(starship),
-        name: starship.name,
-        model: starship.model,
-        manufacturer: starship.manufacturer,
-        costInCredits: starship.cost_in_credits,
-        length: starship.length,
-        crew: starship.crew,
-        passengers: starship.passengers,
-        cargoCapacity: starship.cargoCapacity
-    });
-
-    _transformPerson = person => ({
-        id: this._extractId(person),
-        name: person.name,
-        gender: person.gender,
-        birthYear: person.birth_year,
-        eyeColor: person.eye_color
-    });
+    getAllGroups = async () => {
+        
+        return (await this.getResource('/groups'))
+    }    
 }
