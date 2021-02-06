@@ -1,0 +1,27 @@
+.App {
+    background-color:white;
+}
+
+.Title {
+    height: 2.2rem;
+    background-color: #016974 ;
+    color: white;
+}
+
+.Title button {    
+    color:white;
+    background-color:transparent;
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 15px;
+    border:none;
+    margin: 1%;
+}
+
+.Title label {     
+    display: inline-block;
+    vertical-align: middle;
+    font-family: Arial, Times, sans-serif;
+    font-size: 1.2rem;    
+    margin-left: 1%;   
+}
