@@ -1,4 +1,5 @@
 import React from 'react';
+import { AddGroup, AddGood } from '../additem/add_item.js';
 
 class Group extends React.Component{
     /*
@@ -13,12 +14,18 @@ class Group extends React.Component{
 
         return(
             <li key={this.props.id}>
-                <button 
-                    className="square" 
+                <button                     
+                    className="Group" 
                     onClick={()=>{ this.props.onClick()}}
                 >
                 {this.props.name}                
-                </button>                
+                </button>        
+                <button 
+                    className="Group" 
+                    onClick={()=>{this.props.deleteOnClick(this.props.id)}}
+                >
+                X Delete
+                </button>                        
           </li>
         )
     }
@@ -53,6 +60,12 @@ class Good extends React.Component{
                     src={`data:image/jpeg;base64,${imgData}`}
                     alt="Изображение отсутствует">
                 </img>
+                <button 
+                    className="Good" 
+                    onClick={()=>{this.props.deleteOnClick(this.props.id)}}
+                >
+                X Delete
+                </button>
             </li>
         )
     }
@@ -65,6 +78,7 @@ class List extends React.Component{
                 id = {obj._id}
                 name = {obj.displayName}                
                 onClick = {()=>this.props.onClick(obj)}
+                deleteOnClick = {(id)=>this.props.deleteOnClick(id)}
             />
         )
     }
@@ -76,30 +90,67 @@ class List extends React.Component{
                 id = {obj._id}                 
                 name = {obj.name}
                 image = {obj.image}
+                deleteOnClick = {(id)=>this.props.deleteOnClick(id)}
             />
         )
     }
 
+    renderChangeGroup(obj){
+        //console.log(obj.name);
+        return(
+            <AddGroup 
+                inputValue = {this.props.inputValue}
+                updateInputValue = {(evt)=>this.props.updateInputValue(evt)}
+                onClick = {(value)=>this.props.submitOnClick(value)}
+
+            />
+        );
+    }
+
+    renderChangeGood(obj){
+        //console.log(obj.name);
+        return(
+            <AddGood
+                inputValue = {this.props.inputValue}
+                updateInputValue = {(evt)=>this.props.updateInputValue(evt)}
+                onClick = {(value)=>this.props.submitOnClick(value)}
+
+            />
+        );
+    }    
+
     render(){      
         console.log("List render", this.props.listType);
+        
+        let elements;
+        switch (Number(this.props.listType)) {
+            case Number(process.env.REACT_APP_LIST_TYPE_GROUP):
+            case Number(process.env.REACT_APP_LIST_TYPE_GOOD):
+                elements = (<ol>
+                            {this.props.result.map((result) => {
+                                
+                                if (this.props.listType==process.env.REACT_APP_LIST_TYPE_GROUP) {
+                                    return this.renderElementGroup(result)
 
-        const elements = this.props.result.map((result) => {
-            switch (this.props.listType) {
-                case 0:                    
-                    return (                
-                        this.renderElementGroup(result)                        
-                    )                                                            
-                case 1:                    
-                    return (        
-                        this.renderElementGood(result)
-                    )                                                
-                default:
-                    break;
-            }
-            return (<li></li>);
-        });        
+                                }else{
+                                    return this.renderElementGood(result)
+                                }
+                            })}
+                        </ol>);
+                
+                break;
+            case Number(process.env.REACT_APP_LIST_TYPE_CHANGE_GROUP):            
+                elements = this.renderChangeGroup(null);        
+                break;
+            case Number(process.env.REACT_APP_LIST_TYPE_CHANGE_GOOD):            
+                elements = this.renderChangeGood(null);        
+                break;
+            default:
+                break;
+        }
+        
         return(
-            <ol>{elements}</ol>
+            elements
         );
     }
 }

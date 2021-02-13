@@ -2,13 +2,13 @@
     background-color:white;
 }
 
-.Title {
+.Header {
     height: 2.2rem;
     background-color: #016974 ;
     color: white;
 }
 
-.Title button {    
+.Header button {    
     color:white;
     background-color:transparent;
     display: inline-block;
@@ -18,7 +18,7 @@
     margin: 1%;
 }
 
-.Title label {     
+.Header label {     
     display: inline-block;
     vertical-align: middle;
     font-family: Arial, Times, sans-serif;
