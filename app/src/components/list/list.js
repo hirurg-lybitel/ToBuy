@@ -13,16 +13,18 @@ class Group extends React.Component{
         console.log("group render");
 
         return(
-            <li key={this.props.id}>
+            <li key={this.props.object._id}>
                 <button                     
                     className="Group" 
                     onClick={()=>{ this.props.onClick()}}
                 >
-                {this.props.name}                
+                {this.props.object.name}                
                 </button>        
+                <button
+                    onClick={()=>{this.props.changeOnClick(this.props.object)}}>...</button>
                 <button 
                     className="Group" 
-                    onClick={()=>{this.props.deleteOnClick(this.props.id)}}
+                    onClick={()=>{this.props.deleteOnClick(this.props.object._id)}}
                 >
                 X Delete
                 </button>                        
@@ -60,11 +62,12 @@ class Good extends React.Component{
                     src={`data:image/jpeg;base64,${imgData}`}
                     alt="Изображение отсутствует">
                 </img>
+                <button>...</button>
                 <button 
                     className="Good" 
                     onClick={()=>{this.props.deleteOnClick(this.props.id)}}
                 >
-                X Delete
+                X
                 </button>
             </li>
         )
@@ -76,8 +79,10 @@ class List extends React.Component{
         return(
             <Group
                 id = {obj._id}
-                name = {obj.displayName}                
+                name = {obj.displayName}   
+                object = {obj}             
                 onClick = {()=>this.props.onClick(obj)}
+                changeOnClick = {(obj)=>this.props.changeOnClick(obj)}
                 deleteOnClick = {(id)=>this.props.deleteOnClick(id)}
             />
         )
@@ -96,10 +101,12 @@ class List extends React.Component{
     }
 
     renderChangeGroup(obj){
-        //console.log(obj.name);
+        console.log("renderChangeGroup", obj);
         return(
             <AddGroup 
                 inputValue = {this.props.inputValue}
+                inputID = {this.props.inputID}
+                inputObject = {this.props.inputObject}
                 updateInputValue = {(evt)=>this.props.updateInputValue(evt)}
                 onClick = {(value)=>this.props.submitOnClick(value)}
 
@@ -140,7 +147,7 @@ class List extends React.Component{
                 
                 break;
             case Number(process.env.REACT_APP_LIST_TYPE_CHANGE_GROUP):            
-                elements = this.renderChangeGroup(null);        
+                elements = this.renderChangeGroup(this.props.inputID);        
                 break;
             case Number(process.env.REACT_APP_LIST_TYPE_CHANGE_GOOD):            
                 elements = this.renderChangeGood(null);        

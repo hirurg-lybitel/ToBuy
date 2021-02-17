@@ -20,7 +20,9 @@ class App extends React.Component{
             listType: process.env.REACT_APP_LIST_TYPE_GROUP,    /** 0 - группы товаров, 1 - товары, 2 - изменение*/
             result: [],
             collection: null,                                   /** текущая коллекция*/
-            inputValue: ''  
+            inputValue: '',
+            inputID: '',
+            inputObject: null
         };
     }
 
@@ -56,7 +58,7 @@ class App extends React.Component{
     }
 
     /** окно добавления/изменения данных */
-    setProp(){
+    setProp(obj){
         if (this.state.listType == process.env.REACT_APP_LIST_TYPE_CHANGE_GROUP || 
             this.state.listType == process.env.REACT_APP_LIST_TYPE_CHANGE_GOOD) return;        
 
@@ -73,8 +75,12 @@ class App extends React.Component{
             default:
                 break;
         }
+        
         this.setState({
-            listType: listType
+            listType: listType,
+            inputObject: obj,
+            inputValue: (obj) ? obj.name : this.state.inputValue,
+            inputID: (obj) ? obj._id : this.state.inputID
         })
 
         console.log("setProp", this.state.listType, this.state.collection);
@@ -84,11 +90,11 @@ class App extends React.Component{
         console.log("submitOnClick", insObject, this.state.listType, this.state.collection) ;
 
         if (!insObject) return;
-        if (!insObject.name) return;            
+        if (!insObject.name) return;
         
         switch (Number(this.state.listType)) {
             case Number(process.env.REACT_APP_LIST_TYPE_CHANGE_GROUP):                
-                this.apiService.addGroup(insObject.name).then((result) =>{
+                this.apiService.addGroup(insObject).then((result) =>{
                     console.log("addGroup", result);
                     this.getDataFromDatabase(process.env.REACT_APP_LIST_TYPE_GROUP);
                 })      
@@ -155,7 +161,8 @@ class App extends React.Component{
                         result: result,
                         listType: listType,
                         collection: null,
-                        inputValue: ''  
+                        inputValue: '',
+                        inputObject: null
                     })
                 })
                 break;
@@ -166,7 +173,8 @@ class App extends React.Component{
                         result: result,
                         listType: listType,
                         collection: collection,
-                        inputValue: ''  
+                        inputValue: '',
+                        inputObject: null
                     })
                 })                
                 break; 
@@ -201,7 +209,10 @@ class App extends React.Component{
                         deleteOnClick = {(id)=>this.deleteOnClick(id)}
                         submitOnClick = {(value)=>this.submitOnClick(value)}
                         inputValue = {this.state.inputValue}
-                        updateInputValue = {(evt)=>this.updateInputValue(evt)}                        
+                        inputID = {this.state.inputID}
+                        inputObject = {this.state.inputObject}
+                        updateInputValue = {(evt)=>this.updateInputValue(evt)}
+                        changeOnClick = {(value)=>this.setProp(value)}
                     />
                 </div>
             </div>

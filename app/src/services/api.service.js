@@ -60,14 +60,17 @@ export default class ApiService {
         return (await this.getResource(`/groups?id=${id}`))
     }        
 
-    addGroup = async (groupName) => {
-        return (await this.postResource(`/groups?name=${groupName}`))
+    addGroup = async (insObject) => {
+        
+        const groupName = insObject.name;
+        const groupID   = insObject._id ? insObject._id : '';
+
+        return (await this.postResource(`/groups?name=${groupName}&id=${groupID}`))
     }   
         
     addGood = async (groupName, body) => {         
         return (await this.postResource(`/goods?name=${groupName}`, body))
     }       
-
 
     deleteGroup = async (id) => {
         return (await this.deleteResourse(`/groups?id=${id}`));

@@ -3,10 +3,24 @@ import DraggableUploader from "./draggableUploader";
 
 export class AddGroup extends React.Component {
     render(){
+        
+        let inputObject;
+        if (!this.props.inputObject){
+            inputObject = {"name":this.props.inputValue};
+        }else{
+            inputObject = Object.assign({}, this.props.inputObject);            
+            inputObject.name = this.props.inputValue;
+        }
+
+        //console.log("AddGroup", inputObject, this.props.inputObject);
+
         return (
             <div>
                 <input value={this.props.inputValue} onChange={(evt) => this.props.updateInputValue(evt)}/>
-                <button onClick={()=>this.props.onClick({"name":this.props.inputValue})} >OK</button>
+                <button 
+                    onClick={()=>this.props.onClick(inputObject)}>
+                    OK
+                </button>                  
             </div>
         );
     }
@@ -37,7 +51,6 @@ export class AddGood extends React.Component {
             <div>
                 <input value={this.props.inputValue} onChange={(evt) => this.props.updateInputValue(evt)}/>               
                 <button onClick={()=>this.props.onClick({"name":this.props.inputValue})} >OK</button>
-                
             </div>
         );
     }

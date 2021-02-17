@@ -267,6 +267,13 @@ router.post('/groups', function(req ,res){
     return;
   }    
 
+  let filter = {name:groupName};
+  // если в запросе есть id, то ищем по id 
+  const groupID = req.query.id;
+  if (ObjectId.isValid(groupID)) {
+    filter = {"_id":ObjectId(groupID)};
+  }    
+
   const mongoClient = new MongoClient(process.env.MONGO_URL, { useUnifiedTopology: true });
   
   mongoClient.connect(function(err, client){
@@ -282,7 +289,7 @@ router.post('/groups', function(req ,res){
 
     const newDocument = {name: groupName, displayName:groupName};
     
-    collection.updateOne({name:groupName},  {$set:newDocument}, {upsert:true}, function(err, result){
+    collection.updateOne(filter,  {$set:newDocument}, {upsert:true}, function(err, result){
             
       if(err) {
         res.status(400);
@@ -293,7 +300,7 @@ router.post('/groups', function(req ,res){
 
       if (!result) return;                   
 
-      collection.findOne({name:groupName}, function(err, result){       
+      collection.findOne(filter, function(err, result){       
 
         res.status(200);
         res.send(result);
