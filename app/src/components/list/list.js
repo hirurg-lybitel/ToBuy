@@ -26,7 +26,7 @@ class Group extends React.Component{
                     className="Group" 
                     onClick={()=>{this.props.deleteOnClick(this.props.object._id)}}
                 >
-                X Delete
+                X
                 </button>                        
           </li>
         )
@@ -34,38 +34,32 @@ class Group extends React.Component{
 }
 
 class Good extends React.Component{
-    /*
-    shouldComponentUpdate(nextProps){
-        if (this.props.value !== nextProps.value) return true;
-  
-        return false;
-    } 
-    */   
     render(){
         console.log("good render");
 
         let imgData = null;
-        if (this.props.image){
-            imgData = this.props.image.data;
+        if (this.props.object.image){
+            imgData = this.props.object.image.data;
             if (!imgData) imgData = null;
         }
-
+        //src={`data:image/jpeg;base64,${imgData}`}
 
         return(
-            <li key={this.props.id}>
+            <li key={this.props.object.id}>
                 <button 
                     className="Good" 
                 >
-                {this.props.name}                
+                {this.props.object.name}                
                 </button>
-                <img height="100"
-                    src={`data:image/jpeg;base64,${imgData}`}
+                <img height="100px"
+                    src={imgData}
                     alt="Изображение отсутствует">
                 </img>
-                <button>...</button>
+                <button
+                    onClick={()=>{this.props.changeOnClick(this.props.object)}}>...</button>
                 <button 
                     className="Good" 
-                    onClick={()=>{this.props.deleteOnClick(this.props.id)}}
+                    onClick={()=>{this.props.deleteOnClick(this.props.object.id)}}
                 >
                 X
                 </button>
@@ -92,20 +86,18 @@ class List extends React.Component{
         console.log(obj.name);
         return(
             <Good
-                id = {obj._id}                 
-                name = {obj.name}
-                image = {obj.image}
+                object = {obj}     
+                changeOnClick = {(obj)=>this.props.changeOnClick(obj)}
                 deleteOnClick = {(id)=>this.props.deleteOnClick(id)}
             />
         )
     }
 
-    renderChangeGroup(obj){
-        console.log("renderChangeGroup", obj);
+    renderChangeGroup(){
+        console.log("renderChangeGroup", this.props.inputObject);
         return(
             <AddGroup 
-                inputValue = {this.props.inputValue}
-                inputID = {this.props.inputID}
+                inputValue = {this.props.inputValue}            
                 inputObject = {this.props.inputObject}
                 updateInputValue = {(evt)=>this.props.updateInputValue(evt)}
                 onClick = {(value)=>this.props.submitOnClick(value)}
@@ -114,12 +106,15 @@ class List extends React.Component{
         );
     }
 
-    renderChangeGood(obj){
-        //console.log(obj.name);
+    renderChangeGood(){
+        console.log("renderChangeGood", this.props.inputObject);
         return(
             <AddGood
                 inputValue = {this.props.inputValue}
+                inputObject = {this.props.inputObject}
                 updateInputValue = {(evt)=>this.props.updateInputValue(evt)}
+                newImgObj = {this.props.newImgObj}
+                chooseImageOnChange = {(evt)=>this.props.chooseImageOnChange(evt)}
                 onClick = {(value)=>this.props.submitOnClick(value)}
 
             />
@@ -147,10 +142,10 @@ class List extends React.Component{
                 
                 break;
             case Number(process.env.REACT_APP_LIST_TYPE_CHANGE_GROUP):            
-                elements = this.renderChangeGroup(this.props.inputID);        
+                elements = this.renderChangeGroup();        
                 break;
             case Number(process.env.REACT_APP_LIST_TYPE_CHANGE_GOOD):            
-                elements = this.renderChangeGood(null);        
+                elements = this.renderChangeGood();        
                 break;
             default:
                 break;

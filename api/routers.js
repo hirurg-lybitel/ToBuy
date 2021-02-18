@@ -9,6 +9,9 @@ const ObjectId = require("mongodb").ObjectId;
 
 const cors = require('cors');
 
+router.use(express.json({limit: '10mb'}));
+router.use(express.urlencoded({limit: '10mb', extended:true}));
+
 router.use(express.json());
 router.use(cors());
 

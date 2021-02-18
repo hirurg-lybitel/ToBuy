@@ -18,7 +18,7 @@ export default class ApiService {
             `${this._apiBase}${url}`, 
             {method: 'POST',
             headers:{
-                'Accept': 'application/json',
+                'Accept': 'application/json',                
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(sendBody)});

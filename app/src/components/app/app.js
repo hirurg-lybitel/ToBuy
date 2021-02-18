@@ -26,8 +26,7 @@ class App extends React.Component{
         };
     }
 
-    componentDidMount(){
-        console.log("componentDidMount");
+    componentDidMount(){        
         this.getDataFromDatabase(process.env.REACT_APP_LIST_TYPE_GROUP);           
     }    
 
@@ -39,7 +38,7 @@ class App extends React.Component{
     /** кнопка Назад в меню */
     goBackClick(currentListType){
         
-        console.log("goBackClick", currentListType, this.state.listType);    
+        //console.log("goBackClick", currentListType, this.state.listType);    
 
         switch (Number(this.state.listType)) {
             case Number(process.env.REACT_APP_LIST_TYPE_GROUP):
@@ -62,7 +61,7 @@ class App extends React.Component{
         if (this.state.listType == process.env.REACT_APP_LIST_TYPE_CHANGE_GROUP || 
             this.state.listType == process.env.REACT_APP_LIST_TYPE_CHANGE_GOOD) return;        
 
-        console.log("setProp", this.state.listType, this.state.collection);
+        //console.log("setProp", this.state.listType, this.state.collection);
 
         let listType=0;
         switch (Number(this.state.listType)) {
@@ -81,16 +80,16 @@ class App extends React.Component{
             inputObject: obj,
             inputValue: (obj) ? obj.name : this.state.inputValue,
             inputID: (obj) ? obj._id : this.state.inputID
-        })
-
-        console.log("setProp", this.state.listType, this.state.collection);
+        })        
     }
 
+    /** сохранить изменения */
     submitOnClick(insObject){
-        console.log("submitOnClick", insObject, this.state.listType, this.state.collection) ;
+        //console.log("submitOnClick", insObject, this.state.listType, this.state.collection) ;
 
         if (!insObject) return;
         if (!insObject.name) return;
+
         
         switch (Number(this.state.listType)) {
             case Number(process.env.REACT_APP_LIST_TYPE_CHANGE_GROUP):                
@@ -108,22 +107,13 @@ class App extends React.Component{
             default:
                 break;
         }
-/*
-        this.apiService.addGroup(groupName).then((result) =>{
-            console.log("addGroup", result);
-            this.getDataFromDatabase(process.env.REACT_APP_LIST_TYPE_GROUP);
-        })      
-*/
     }
 
-    setItem(colName){
-
-    }
-
+    /** удаление позиции списка */
     deleteOnClick(id){        
         if (!id) return;
 
-        console.log("deleteOnClick", this.state.collection);
+        //console.log("deleteOnClick", this.state.collection);
 
         switch (Number(this.state.listType)) {
             case Number(process.env.REACT_APP_LIST_TYPE_GROUP):
@@ -143,11 +133,44 @@ class App extends React.Component{
         }        
     }
 
+    /** обработчик ввода наименования */
     updateInputValue(evt) {        
         this.setState({
           inputValue: evt.target.value
         });
       }
+
+    /** преобразование изображения в binary */
+    getBase64(file, cb) {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            console.log("getBase64", reader.result);
+            cb({
+                name: file.name,
+                type: file.type,
+                base64: reader.result
+            })
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
+    }
+      
+    /** загрузка изображения */
+    chooseImageOnChange(event) {
+                
+        const file = event.target.files[0];
+
+        //console.log("chooseImageOnChange", file);
+        
+        this.getBase64(file, (result) => {                      
+            console.log("chooseImageOnChange_result", result);
+            this.setState({
+                newImgObj: result
+            });
+        });     
+    } 
     
     /** считывание записей из БД */
     getDataFromDatabase(listType, collection = null){
@@ -162,7 +185,8 @@ class App extends React.Component{
                         listType: listType,
                         collection: null,
                         inputValue: '',
-                        inputObject: null
+                        inputObject: null,
+                        newImgObj: null
                     })
                 })
                 break;
@@ -174,7 +198,8 @@ class App extends React.Component{
                         listType: listType,
                         collection: collection,
                         inputValue: '',
-                        inputObject: null
+                        inputObject: null,
+                        newImgObj: null
                     })
                 })                
                 break; 
@@ -211,7 +236,9 @@ class App extends React.Component{
                         inputValue = {this.state.inputValue}
                         inputID = {this.state.inputID}
                         inputObject = {this.state.inputObject}
+                        newImgObj = {this.state.newImgObj}
                         updateInputValue = {(evt)=>this.updateInputValue(evt)}
+                        chooseImageOnChange = {(evt)=>this.chooseImageOnChange(evt)}
                         changeOnClick = {(value)=>this.setProp(value)}
                     />
                 </div>

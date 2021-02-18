@@ -1,5 +1,17 @@
 import React from 'react';
-import DraggableUploader from "./draggableUploader";
+//import UploadImage from './uploadImage';
+//import DraggableUploader from "./draggableUploader";
+
+import noImage from './image.png';
+import './addItem.css';
+
+/*
+import { Image } from 'semantic-ui-react'
+
+const ImageExampleImage = () => (
+  <Image src='https://react.semantic-ui.com/images/wireframe/image.png' size='small' />
+)
+*/
 
 export class AddGroup extends React.Component {
     render(){
@@ -27,31 +39,61 @@ export class AddGroup extends React.Component {
 }
 
 export class AddGood extends React.Component {
-    state = {
-        files: [
-          'nice.pdf',
-          'verycool.jpg',
-          'amazing.png',
-          'goodstuff.mp3',
-          'thankyou.doc'
-        ]
-      }
-
-      handleDrop = (files) => {
-        let fileList = this.state.files
-        for (var i = 0; i < files.length; i++) {
-          if (!files[i].name) return
-          fileList.push(files[i].name)
-        }
-        this.setState({files: fileList})
-      }  
 
     render(){
+
+               
+
+        let inputObject;
+        if (!this.props.inputObject){
+            inputObject = {
+                "name":this.props.inputValue,
+                "image": {"data":"", "conentType":""}
+            };
+        }else{
+            inputObject = Object.assign({}, this.props.inputObject);            
+            inputObject.name = this.props.inputValue;            
+        }
+
+        if (this.props.newImgObj){
+            //imgData = this.props.newImgData;
+
+            inputObject.image.data = this.props.newImgObj.base64;
+            inputObject.image.contentType = this.props.newImgObj.type;        
+        }                    
+        
+        let imgData = noImage;
+        if (inputObject.image){
+            imgData = inputObject.image.data;
+            if (!imgData){
+                imgData = noImage;
+            }else{
+                //imgData = `data:image/jpeg;base64,${imgData}`;
+            };
+        }      
+
+        console.log("AddGood", inputObject);   
+        
         return (
             <div>
-                <input value={this.props.inputValue} onChange={(evt) => this.props.updateInputValue(evt)}/>               
-                <button onClick={()=>this.props.onClick({"name":this.props.inputValue})} >OK</button>
+                <input
+                    value={this.props.inputValue}
+                    onChange={(evt) => this.props.updateInputValue(evt)}
+                />
+                <button 
+                    onClick={()=>this.props.onClick(inputObject)}
+                >
+                    OK
+                </button>   
+
+                <img
+                    className="img"
+                    src={imgData}
+                    alt='not found'></img>                
+                <input type="file" onChange={(e)=>this.props.chooseImageOnChange(e)}/>              
             </div>
         );
     }
+
+    //https://react.semantic-ui.com/images/wireframe/image.png
 }
