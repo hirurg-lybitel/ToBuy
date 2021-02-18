@@ -25,3 +25,4 @@ app/yarn-error.log*
 # dotenv
 api/.env
 app/.env
+app/.eslintcache
